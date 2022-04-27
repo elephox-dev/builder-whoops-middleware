@@ -1,0 +1,23 @@
+{
+    "name": "elephox/builder-whoops-middleware",
+    "description": "Elephox Web Application Builder extension for Whoops Middleware",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Ricardo Boss",
+            "email": "contact@ricardoboss.de"
+        }
+    ],
+    "require": {
+        "elephox/web": "dev-develop",
+        "filp/whoops": "^2.14"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Elephox\\Builder\\Whoops\\": "src/"
+        }
+    }
+}
