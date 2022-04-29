@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "elephox/web": "^0.4",
+        "elephox/web": "dev-develop",
         "filp/whoops": "^2.14"
     },
     "minimum-stability": "dev",
