@@ -11,19 +11,19 @@ use Whoops\RunInterface as WhoopsRunInterface;
 
 trait AddsWhoopsMiddleware
 {
-    abstract protected function getServices(): ServiceCollection;
+	abstract protected function getServices(): ServiceCollection;
 
-    abstract protected function getPipeline(): RequestPipelineBuilder;
+	abstract protected function getPipeline(): RequestPipelineBuilder;
 
-    public function addWhoops(bool $registerAsExceptionHandler = true): void
-    {
-        $whoopsExceptionHandler = new WhoopsExceptionHandlerMiddleware(fn() => $this->getServices()->requireService(WhoopsRunInterface::class));
+	public function addWhoops(bool $registerAsExceptionHandler = true): void
+	{
+		$whoopsExceptionHandler = new WhoopsExceptionHandlerMiddleware(fn () => $this->getServices()->requireService(WhoopsRunInterface::class));
 
-        $this->getPipeline()->push($whoopsExceptionHandler);
-        $this->getServices()->addSingleton(WhoopsRunInterface::class, WhoopsRun::class);
+		$this->getPipeline()->push($whoopsExceptionHandler);
+		$this->getServices()->addSingleton(WhoopsRunInterface::class, WhoopsRun::class);
 
-        if ($registerAsExceptionHandler) {
-            $this->getServices()->addSingleton(ExceptionHandler::class, implementation: $whoopsExceptionHandler, replace: true);
-        }
-    }
+		if ($registerAsExceptionHandler) {
+			$this->getServices()->addSingleton(ExceptionHandler::class, implementation: $whoopsExceptionHandler, replace: true);
+		}
+	}
 }
