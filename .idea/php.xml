@@ -10,7 +10,6 @@
       <path value="$PROJECT_DIR$/vendor/filp/whoops" />
       <path value="$PROJECT_DIR$/vendor/elephox/http" />
       <path value="$PROJECT_DIR$/vendor/elephox/web" />
-      <path value="$PROJECT_DIR$/vendor/elephox/platform" />
       <path value="$PROJECT_DIR$/vendor/vlucas/phpdotenv" />
       <path value="$PROJECT_DIR$/vendor/elephox/files" />
       <path value="$PROJECT_DIR$/vendor/elephox/mimey" />
