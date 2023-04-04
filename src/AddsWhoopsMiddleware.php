@@ -23,7 +23,7 @@ trait AddsWhoopsMiddleware
 		$this->getServices()->addSingleton(WhoopsRunInterface::class, WhoopsRun::class);
 
 		if ($registerAsExceptionHandler) {
-			$this->getServices()->addSingleton(ExceptionHandler::class, implementation: $whoopsExceptionHandler, replace: true);
+			$this->getServices()->addSingleton(ExceptionHandler::class, instance: $whoopsExceptionHandler, replace: true);
 		}
 	}
 }
