@@ -19,7 +19,9 @@ trait AddsWhoopsMiddleware
 	{
 		$whoopsExceptionHandler = new WhoopsExceptionHandlerMiddleware(fn () => $this->getServices()->requireService(WhoopsRunInterface::class));
 
-		$this->getPipeline()->push($whoopsExceptionHandler);
+		// replace existing exception handler, if any
+		$this->getPipeline()->exceptionHandler($whoopsExceptionHandler);
+
 		$this->getServices()->addSingleton(WhoopsRunInterface::class, WhoopsRun::class);
 
 		if ($registerAsExceptionHandler) {
