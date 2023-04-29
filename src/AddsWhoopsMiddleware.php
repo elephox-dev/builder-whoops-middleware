@@ -17,15 +17,16 @@ trait AddsWhoopsMiddleware
 
 	public function addWhoops(bool $registerAsExceptionHandler = true): void
 	{
-		$whoopsExceptionHandler = new WhoopsExceptionHandlerMiddleware(fn () => $this->getServices()->requireService(WhoopsRunInterface::class));
+		$this->getServices()->tryAddSingleton(WhoopsRunInterface::class, WhoopsRun::class);
+
+		$runner = $this->getServices()->require(WhoopsRunInterface::class);
+		$handler = new WhoopsExceptionHandlerMiddleware($runner);
 
 		// replace existing exception handler, if any
-		$this->getPipeline()->exceptionHandler($whoopsExceptionHandler);
-
-		$this->getServices()->addSingleton(WhoopsRunInterface::class, WhoopsRun::class);
+		$this->getPipeline()->exceptionHandler($handler);
 
 		if ($registerAsExceptionHandler) {
-			$this->getServices()->addSingleton(ExceptionHandler::class, instance: $whoopsExceptionHandler, replace: true);
+			$this->getServices()->addSingleton(ExceptionHandler::class, instance: $handler);
 		}
 	}
 }

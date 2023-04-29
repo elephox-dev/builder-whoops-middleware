@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elephox\Builder\Whoops;
 
-use Closure;
 use Elephox\Http\Contract\ResponseBuilder;
 use Elephox\Mimey\MimeType;
 use Elephox\Stream\StringStream;
@@ -17,16 +16,15 @@ use Whoops\RunInterface as WhoopsRunInterface;
 class WhoopsExceptionHandlerMiddleware extends DefaultExceptionHandler
 {
 	/**
-	 * @param Closure(): WhoopsRunInterface $whoopsRunInterfaceFactory
+	 * @param WhoopsRunInterface $whoopsRunInterface
 	 */
 	public function __construct(
-		private readonly Closure $whoopsRunInterfaceFactory,
+		private readonly WhoopsRunInterface $whoopsRunInterface,
 	) {
 	}
 
 	protected function setResponseBody(ResponseBuilder $response): ResponseBuilder
 	{
-		$runner = ($this->whoopsRunInterfaceFactory)();
 		$exception = $response->getException();
 		if ($exception === null) {
 			if ($response->getBody() === null) {
@@ -36,25 +34,24 @@ class WhoopsExceptionHandlerMiddleware extends DefaultExceptionHandler
 			return $response;
 		}
 
-		if (empty($runner->getHandlers())) {
+		if (empty($this->whoopsRunInterface->getHandlers())) {
 			if ($contentType = $response->getContentType()) {
-				$runner->pushHandler(match ($contentType->getValue()) {
+				$this->whoopsRunInterface->pushHandler(match ($contentType->getValue()) {
 					MimeType::ApplicationJson->getValue() => new JsonResponseHandler(),
 					MimeType::ApplicationXml->getValue() => new XmlResponseHandler(),
 					MimeType::TextPlain->getValue() => new PlainTextHandler(),
 					default => new PrettyPageHandler(),
 				});
 			} else {
-				$runner->pushHandler(new PrettyPageHandler());
+				$this->whoopsRunInterface->pushHandler(new PrettyPageHandler());
 				$response->contentType(MimeType::TextHtml);
 			}
 		}
 
-		$runner->allowQuit(false);
-		$runner->writeToOutput(false);
+		$this->whoopsRunInterface->allowQuit(false);
+		$this->whoopsRunInterface->writeToOutput(false);
 
-		/** @var non-empty-string $content */
-		$content = $runner->handleException($exception);
+		$content = $this->whoopsRunInterface->handleException($exception);
 
 		return $response->body(new StringStream($content));
 	}
