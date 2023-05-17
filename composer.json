@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^8.2 <8.4",
-        "elephox/web": "*",
+        "elephox/framework": "dev-develop",
         "filp/whoops": "^2.15"
     },
     "require-dev": {

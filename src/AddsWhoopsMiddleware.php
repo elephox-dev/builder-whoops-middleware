@@ -19,7 +19,7 @@ trait AddsWhoopsMiddleware
 	{
 		$this->getServices()->tryAddSingleton(WhoopsRunInterface::class, WhoopsRun::class);
 
-		$runner = $this->getServices()->require(WhoopsRunInterface::class);
+		$runner = $this->getServices()->get(WhoopsRunInterface::class);
 		$handler = new WhoopsExceptionHandlerMiddleware($runner);
 
 		// replace existing exception handler, if any
